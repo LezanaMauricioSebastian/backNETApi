@@ -9,9 +9,9 @@
 
         public string DepartmentName { get; set; }
 
-        public string EmpoyeeName { get; set; } = null!;
+        public string Name { get; set; } = null!;
 
-        public string EmployeeSurname { get; set; } = null!;
+        public string Surname { get; set; } = null!;
 
         public double Salary { get; set; }
 
