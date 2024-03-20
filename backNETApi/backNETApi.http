@@ -1,0 +1,6 @@
+@backNETApi_HostAddress = http://localhost:5261
+
+GET {{backNETApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
