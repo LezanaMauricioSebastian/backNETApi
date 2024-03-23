@@ -34,7 +34,15 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
  builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("newPolicy", app =>
+    {
+        app.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 
 
 var app = builder.Build();
@@ -140,8 +148,10 @@ app.MapDelete("/employee/delete/{idEmployee}",async(
     });
 #endregion
 
+app.UseCors("newPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 app.Run();
