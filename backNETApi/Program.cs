@@ -56,6 +56,69 @@ if (app.Environment.IsDevelopment())
 
 
 #region Peticiones API REST
+app.MapDelete("/department/delete/{idDepartment}", async (
+    int idDepartment,
+    IDepartmentService departmentService
+    ) => {
+
+        var found = await departmentService.GetById(idDepartment);
+        if (found is null) { return Results.NotFound(); }
+        var answer = await departmentService.Delete(found);
+        if (answer)
+        {
+            return Results.Ok();
+        }
+        else
+        {
+            return Results.StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+    });
+app.MapPut("/department/update/{idDepartment}", async (
+    int idDepartment,
+    DepartmentDTO model,
+    IDepartmentService departmentService,
+    IMapper mapper
+    ) =>
+{
+    var found = await departmentService.GetById(idDepartment);
+    if (found is null) { return Results.NotFound(); }
+    var department = mapper.Map<Department>(model);
+
+    found.Name = department.Name;
+
+
+    var answer = await departmentService.Update(found);
+
+    if (answer)
+    {
+        return Results.Ok(mapper.Map<DepartmentDTO>(found));
+    }
+    else
+    {
+        return Results.StatusCode(StatusCodes.Status500InternalServerError);
+    }
+
+});
+
+app.MapPost("/department/save", async (
+    DepartmentDTO modelDTO,
+    IDepartmentService departmentService,
+    IMapper mapper
+    ) => {
+        var _department = mapper.Map<Department>(modelDTO);
+        var _CreatedDepartment = await departmentService.Add(_department);
+        if (_CreatedDepartment.IdDepartment != 0)
+        {
+            return Results.Ok(mapper.Map<DepartmentDTO>(_CreatedDepartment));
+        }
+        else
+        {
+            return Results.StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+
+    });
 app.MapGet("/department/list", async (
 
     IDepartmentService _departmentService,

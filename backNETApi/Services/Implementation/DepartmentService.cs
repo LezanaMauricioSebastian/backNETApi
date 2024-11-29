@@ -13,6 +13,36 @@ namespace backNETApi.Services.Implementation
             _employeeContext = employeeContext;
         }
 
+        public async Task<bool> Delete(Department department)
+        {
+            try
+            {
+                _employeeContext.Departments.Remove(department);
+                await _employeeContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        public async Task<bool> Update(Department department)
+        {
+            try
+            {
+                _employeeContext.Departments.Update(department);
+                await _employeeContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        public async Task<Department> GetById(int id)
+        {
+            try
+            {
+                Department? department = new Department();
+                department = await _employeeContext.Departments.Where(e => e.IdDepartment == id).FirstOrDefaultAsync();
+                return department;
+            }
+            catch (Exception ex) { throw ex; }
+        }
         public async Task<List<Department>> getDepartments()
         {
             try
@@ -21,6 +51,17 @@ namespace backNETApi.Services.Implementation
                 list = await _employeeContext.Departments.ToListAsync();
                 return list;
             }catch (Exception ex) { throw ex; }
+        }
+
+        public async Task<Department> Add(Department department)
+        {
+            try
+            {
+                _employeeContext.Departments.Add(department);
+                await _employeeContext.SaveChangesAsync();
+                return department;
+            }
+            catch (Exception ex) { throw ex; }
         }
     }
 }
